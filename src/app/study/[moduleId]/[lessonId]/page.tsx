@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import curriculumA1 from "@/lib/curriculum/curriculum-a1";
 
 export default function LessonPage({
@@ -14,9 +14,21 @@ export default function LessonPage({
 
   const [scrollPosition, setScrollPosition] = useState(0);
 
+  // Extract IDs from pathname as fallback
+  const { moduleId, lessonId } = useMemo(() => {
+    if (params?.moduleId && params?.lessonId) {
+      return { moduleId: params.moduleId, lessonId: params.lessonId };
+    }
+    const match = pathname.match(/\/study\/([^/]+)\/([^/]+)/);
+    return {
+      moduleId: match?.[1] || "",
+      lessonId: match?.[2] || "",
+    };
+  }, [params, pathname]);
+
   // Find lesson
-  const module = curriculumA1.modules.find((m) => m.id === params.moduleId);
-  const lesson = module?.lessons.find((l) => l.id === params.lessonId);
+  const module = curriculumA1.modules.find((m) => m.id === moduleId);
+  const lesson = module?.lessons.find((l) => l.id === lessonId);
 
   if (!lesson || !module) {
     return (
