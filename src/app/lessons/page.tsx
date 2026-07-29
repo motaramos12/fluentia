@@ -37,8 +37,8 @@ export default function LessonsPage() {
   ];
 
   const handleStart = (lessonId: number) => {
-    // Navega para a página de prática de fala com a lição selecionada
-    router.push(`/practice/speak?lesson=${lessonId}`);
+    // Navega para a página de detalhe da lição
+    router.push(`/lessons/${lessonId}`);
   };
 
   return (
