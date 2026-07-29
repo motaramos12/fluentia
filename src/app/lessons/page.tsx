@@ -1,12 +1,45 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 export default function LessonsPage() {
+  const router = useRouter();
+
   const lessons = [
-    { id: 1, title: "Pedir Direções", level: "B1", progress: 65 },
-    { id: 2, title: "Compras", level: "A2", progress: 100 },
-    { id: 3, title: "Restaurante", level: "A1", progress: 45 },
-    { id: 4, title: "Viagem", level: "B2", progress: 0 },
+    {
+      id: 1,
+      title: "Pedir Direções",
+      level: "B1",
+      progress: 65,
+      description: "Aprende vocabulário e frases para pedir direções.",
+    },
+    {
+      id: 2,
+      title: "Compras",
+      level: "A2",
+      progress: 100,
+      description: "Pratica diálogos no contexto de compras.",
+    },
+    {
+      id: 3,
+      title: "Restaurante",
+      level: "A1",
+      progress: 45,
+      description: "Aprende a fazer pedidos e ler um cardápio.",
+    },
+    {
+      id: 4,
+      title: "Viagem",
+      level: "B2",
+      progress: 0,
+      description: "Conversa avançada sobre viagens e planeamento.",
+    },
   ];
+
+  const handleStart = (lessonId: number) => {
+    // Navega para a página de prática de fala com a lição selecionada
+    router.push(`/practice/speak?lesson=${lessonId}`);
+  };
 
   return (
     <div className="p-8 max-w-6xl mx-auto">
@@ -18,7 +51,8 @@ export default function LessonsPage() {
         {lessons.map((lesson) => (
           <div
             key={lesson.id}
-            className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow"
+            className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow cursor-pointer"
+            onClick={() => handleStart(lesson.id)}
           >
             <div className="flex justify-between items-start mb-4">
               <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
@@ -28,6 +62,10 @@ export default function LessonsPage() {
                 {lesson.level}
               </span>
             </div>
+
+            <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+              {lesson.description}
+            </p>
 
             <div className="mb-4">
               <div className="flex justify-between text-sm mb-2">
@@ -46,7 +84,13 @@ export default function LessonsPage() {
               </div>
             </div>
 
-            <button className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 rounded-lg transition-colors">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleStart(lesson.id);
+              }}
+              className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 rounded-lg transition-colors"
+            >
               {lesson.progress === 100 ? "Repetir" : "Começar"}
             </button>
           </div>
