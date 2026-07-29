@@ -1,6 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { useMemo } from "react";
 
 export default function LessonDetailPage({
   params,
@@ -8,8 +9,15 @@ export default function LessonDetailPage({
   params: { id: string };
 }) {
   const router = useRouter();
+  const pathname = usePathname();
 
-  const lessonId = parseInt(params.id);
+  const lessonId = useMemo(() => {
+    if (params?.id) {
+      return parseInt(params.id);
+    }
+    const match = pathname.match(/\/lessons\/(\d+)/);
+    return match ? parseInt(match[1]) : NaN;
+  }, [params, pathname]);
 
   const lessons: Record<
     number,
@@ -134,6 +142,10 @@ export default function LessonDetailPage({
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
           Lição não encontrada
         </h1>
+        <p className="text-slate-600 dark:text-slate-400 mt-2">
+          ID: {params.id} (convertido para: {lessonId})
+        </p>
+        <p className="text-sm text-slate-500 mt-4">IDs válidas: 1, 2, 3, 4</p>
       </div>
     );
   }
