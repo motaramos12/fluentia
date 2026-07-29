@@ -2,6 +2,7 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import { useState, useMemo } from "react";
+import { useSpeech } from "@/lib/hooks/useSpeech";
 import curriculumA1 from "@/lib/curriculum/curriculum-a1";
 
 export default function LessonPage({
@@ -11,6 +12,7 @@ export default function LessonPage({
 }) {
   const router = useRouter();
   const pathname = usePathname();
+  const { speak, isPlaying } = useSpeech();
 
   const [scrollPosition, setScrollPosition] = useState(0);
 
@@ -113,8 +115,12 @@ export default function LessonPage({
                     <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
                       {example.portuguese}
                     </p>
-                    <button className="text-sm text-teal-600 hover:text-teal-700 dark:text-teal-400 hover:dark:text-teal-300 font-semibold flex items-center gap-1">
-                      🔊 Ouvir
+                    <button
+                      onClick={() => speak(example.english, "en-US")}
+                      disabled={isPlaying}
+                      className="text-sm text-teal-600 hover:text-teal-700 dark:text-teal-400 hover:dark:text-teal-300 font-semibold flex items-center gap-1 disabled:opacity-50"
+                    >
+                      {isPlaying ? "🔊 Tocando..." : "🔊 Ouvir"}
                     </button>
                   </div>
                 </div>

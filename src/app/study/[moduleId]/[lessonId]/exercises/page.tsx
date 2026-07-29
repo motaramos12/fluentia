@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { useSpeech } from "@/lib/hooks/useSpeech";
 import curriculumA1 from "@/lib/curriculum/curriculum-a1";
 
 export default function ExercisesPage({
@@ -11,6 +12,7 @@ export default function ExercisesPage({
 }) {
   const router = useRouter();
   const pathname = usePathname();
+  const { speak, isPlaying } = useSpeech();
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<Record<string, string | string[]>>({});
   const [showResults, setShowResults] = useState(false);
@@ -298,11 +300,15 @@ export default function ExercisesPage({
         {currentExercise.type === "listening" && (
           <div>
             <div className="bg-slate-100 dark:bg-slate-700/50 rounded-lg p-8 text-center mb-6">
-              <button className="text-6xl mb-4 hover:scale-110 transition-transform">
+              <button
+                onClick={() => speak(currentExercise.question, "en-US")}
+                disabled={isPlaying}
+                className="text-6xl mb-4 hover:scale-110 transition-transform disabled:opacity-50"
+              >
                 🔊
               </button>
               <p className="text-slate-600 dark:text-slate-400">
-                Clica no botão para ouvir o áudio
+                {isPlaying ? "Tocando..." : "Clica no botão para ouvir o áudio"}
               </p>
             </div>
 
