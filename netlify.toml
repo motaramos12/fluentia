@@ -2,16 +2,38 @@
   command = "npm run build"
   publish = ".next"
 
-[functions]
-  directory = "netlify/functions"
-
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-[context.production]
-  environment = { NODE_VERSION = "20.11.1" }
+[functions]
+  node_bundler = "esbuild"
 
-[context.deploy-preview]
-  environment = { NODE_VERSION = "20.11.1" }
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[redirects]]
+  from = "/study/*"
+  to = "/"
+  status = 200
+
+[[redirects]]
+  from = "/practice/*"
+  to = "/"
+  status = 200
+
+[[redirects]]
+  from = "/progress/*"
+  to = "/"
+  status = 200
+
+[[redirects]]
+  from = "/auth/*"
+  to = "/"
+  status = 200
