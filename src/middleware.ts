@@ -32,7 +32,7 @@ export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   // Protege rotas autenticadas
-  if (pathname.startsWith("/study") || pathname.startsWith("/progress")) {
+  if (pathname.startsWith("/study") || pathname.startsWith("/progress") || pathname.startsWith("/practice")) {
     if (!user) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
