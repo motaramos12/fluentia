@@ -44,8 +44,8 @@ export default function ExercisesPage({
     );
   }
 
-  const exercises = lesson.exercises;
-  const currentExercise = exercises[currentExerciseIndex];
+  const exercises = lesson.exercises as any[];
+  const currentExercise = exercises[currentExerciseIndex] as any;
   const isLastExercise = currentExerciseIndex === exercises.length - 1;
 
   const handleAnswer = (value: string | string[]) => {
@@ -61,11 +61,11 @@ export default function ExercisesPage({
     } else {
       // Calcular score
       let correctCount = 0;
-      exercises.forEach((exercise) => {
+      exercises.forEach((exercise: any) => {
         const userAnswer = userAnswers[exercise.id];
-        if (exercise.type === "multiple-choice") {
+        if (exercise.type === "multiple-choice" && exercise.options) {
           const selectedOption = exercise.options.find(
-            (opt) => opt.text === userAnswer
+            (opt: any) => opt.text === userAnswer
           );
           if (selectedOption?.correct) correctCount++;
         } else if (exercise.type === "translation" || exercise.type === "fill-the-blank") {
@@ -75,9 +75,9 @@ export default function ExercisesPage({
           ) {
             correctCount++;
           }
-        } else if (exercise.type === "listening") {
+        } else if (exercise.type === "listening" && exercise.options) {
           const selectedOption = exercise.options.find(
-            (opt) => opt.text === userAnswer
+            (opt: any) => opt.text === userAnswer
           );
           if (selectedOption?.correct) correctCount++;
         }
@@ -118,10 +118,10 @@ export default function ExercisesPage({
             <div className="bg-white/20 rounded-lg p-4 backdrop-blur">
               <div className="text-3xl font-bold">
                 {Object.keys(userAnswers).filter((id) => {
-                  const exercise = exercises.find((e) => e.id === id);
+                  const exercise: any = exercises.find((e) => e.id === id);
                   const userAnswer = userAnswers[id];
-                  if (exercise?.type === "multiple-choice") {
-                    return exercise.options.find((opt) => opt.text === userAnswer)?.correct;
+                  if (exercise?.type === "multiple-choice" && exercise?.options) {
+                    return exercise.options.find((opt: any) => opt.text === userAnswer)?.correct;
                   }
                   return false;
                 }).length}
@@ -161,12 +161,12 @@ export default function ExercisesPage({
           </h2>
 
           <div className="space-y-4">
-            {exercises.map((exercise, idx) => {
+            {exercises.map((exercise: any, idx) => {
               const userAnswer = userAnswers[exercise.id];
               let isCorrect = false;
 
-              if (exercise.type === "multiple-choice" || exercise.type === "listening") {
-                isCorrect = exercise.options.find((opt) => opt.text === userAnswer)
+              if ((exercise.type === "multiple-choice" || exercise.type === "listening") && exercise.options) {
+                isCorrect = exercise.options.find((opt: any) => opt.text === userAnswer)
                   ?.correct;
               } else if (
                 exercise.type === "translation" ||
@@ -268,7 +268,7 @@ export default function ExercisesPage({
         {/* Rendering by Type */}
         {currentExercise.type === "multiple-choice" && (
           <div className="space-y-3">
-            {currentExercise.options.map((option, idx) => (
+            {currentExercise.options.map((option: any, idx: number) => (
               <button
                 key={idx}
                 onClick={() => handleAnswer(option.text)}
@@ -313,7 +313,7 @@ export default function ExercisesPage({
             </div>
 
             <div className="space-y-3">
-              {currentExercise.options.map((option, idx) => (
+              {currentExercise.options.map((option: any, idx: number) => (
                 <button
                   key={idx}
                   onClick={() => handleAnswer(option.text)}

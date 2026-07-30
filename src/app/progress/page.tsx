@@ -82,9 +82,10 @@ export default function ProgressPage() {
         <div className="space-y-8">
           {["A1", "A2", "B1", "B2"].map((level) => {
             const isCurrentLevel = level === selectedLevel;
-            const levelXP = { A1: 500, A2: 1200, B1: 2000, B2: 3000 }[level as keyof typeof levelXP];
-            const prevLevelXP =
-              level === "A1" ? 0 : { A1: 500, A2: 1200, B1: 2000 }[level === "A2" ? "A1" : level === "B1" ? "A2" : "B1"];
+            const levelXPMap = { A1: 500, A2: 1200, B1: 2000, B2: 3000 } as const;
+            const levelXP = levelXPMap[level as keyof typeof levelXPMap];
+            const prevLevelXPMap = { A1: 0, A2: 500, B1: 1200, B2: 2000 } as const;
+            const prevLevelXP = prevLevelXPMap[level as keyof typeof prevLevelXPMap];
 
             const rangeProgress = Math.min(
               100,
